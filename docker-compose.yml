@@ -1,13 +1,31 @@
-version: '3.8'
-
+version: '3'
 services:
-  nestjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  app:
+    build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    depends_on:
+      - postgres
+      - mongodb
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=seu_usuario
+      - DATABASE_PASSWORD=sua_senha
+      - DATABASE_NAME=virtual_currency_db
+      - MONGODB_URI=mongodb://mongodb:27017/virtual_currency_logs
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: seu_usuario
+      POSTGRES_PASSWORD: sua_senha
+      POSTGRES_DB: virtual_currency_db
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    restart: always
+      - pgdata:/var/lib/postgresql/data
+  mongodb:
+    image: mongo:6
+    volumes:
+      - mongodata:/data/db
+volumes:
+  pgdata:
+  mongodata:

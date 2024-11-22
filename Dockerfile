@@ -1,23 +1,26 @@
-# Use a imagem oficial do Node.js como base
-FROM node:18
+# Etapa de build
+FROM node:18-alpine AS builder
 
-# Define o diretório de trabalho no container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copia o package.json e o package-lock.json
 COPY package*.json ./
-
-# Instala as dependências do projeto
 RUN npm install
 
-# Copia o restante dos arquivos da aplicação
 COPY . .
-
-# Build da aplicação (se necessário)
 RUN npm run build
 
-# Exponha a porta que o Nest.js está rodando
+# Etapa de produção
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package*.json ./
+RUN npm install --only=production
+
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]
+
+
+

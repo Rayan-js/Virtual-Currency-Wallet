@@ -12,6 +12,12 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column()
+  password: string;
+
+  @Column({ default: true })
+  isActive: boolean;
+
   @Column({ type: 'decimal', default: 0, precision: 10, scale: 2 })
   saldo: number;
 
