@@ -9,6 +9,8 @@ import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
+    UsersModule,
+    TransactionsModule,
     ConfigModule.forRoot({
       isGlobal: true, // Torna as variáveis de ambiente acessíveis em todo o projeto
     }),
@@ -22,13 +24,11 @@ import { TransactionsModule } from './transactions/transactions.module';
       database: process.env.DATABASE_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      logging: true,
     }),
 
     // Conexão com MongoDB
     MongooseModule.forRoot(process.env.MONGODB_URI),
-
-    UsersModule,
-    TransactionsModule,
   ],
   controllers: [AppController], // Adiciona o AppController
   providers: [AppService], // Adiciona o AppService
