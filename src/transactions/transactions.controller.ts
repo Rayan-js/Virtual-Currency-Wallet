@@ -23,6 +23,7 @@ export class TransactionsController {
       userId,
       TransactionType.CREDIT,
       createTransactionDto.valor,
+      createTransactionDto.description,
     );
   }
 
@@ -35,6 +36,7 @@ export class TransactionsController {
       userId,
       TransactionType.DEBIT,
       createTransactionDto.valor,
+      createTransactionDto.description,
     );
   }
 

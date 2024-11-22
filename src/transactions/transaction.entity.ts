@@ -23,7 +23,7 @@ export class Transaction {
   @Column('bigint')
   valor: number;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ length: 255, nullable: true, default: 'No description provided' })
   description: string;
 
   @ManyToOne(() => User, (user) => user.transactions)

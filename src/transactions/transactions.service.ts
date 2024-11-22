@@ -30,6 +30,7 @@ export class TransactionsService {
     userId: number,
     tipo: TransactionType,
     valor: number,
+    description?: string, // Adicionado
   ): Promise<Transaction> {
     // Initialize queryRunner
     const queryRunner =
@@ -69,6 +70,7 @@ export class TransactionsService {
       const transaction = new Transaction();
       transaction.tipo = tipo;
       transaction.valor = valor;
+      transaction.description = description || 'No description provided';
       transaction.user = user;
 
       await queryRunner.manager.save(transaction);
