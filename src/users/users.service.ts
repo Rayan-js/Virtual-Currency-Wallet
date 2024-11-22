@@ -35,6 +35,16 @@ export class UsersService {
     }
   }
 
+  async testConnection(): Promise<string> {
+    try {
+      const userCount = await this.usersRepository.count();
+      return `Conexão bem-sucedida! Total de usuários: ${userCount}`;
+    } catch (error) {
+      console.error('Erro ao conectar ao banco:', error);
+      throw new Error('Conexão falhou');
+    }
+  }
+
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find(); // Retorna todos os usuários
   }

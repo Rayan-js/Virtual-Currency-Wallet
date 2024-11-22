@@ -25,6 +25,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('/test-connection')
+  testConnection() {
+    return this.usersService.testConnection();
+  }
+
   // Buscar um usuário por ID
   @Get(':id')
   findOne(@Param('id') id: number) {
