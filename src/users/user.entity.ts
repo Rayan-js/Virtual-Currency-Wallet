@@ -20,7 +20,7 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ type: 'bigint', default: 0 })
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   saldo: number;
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)

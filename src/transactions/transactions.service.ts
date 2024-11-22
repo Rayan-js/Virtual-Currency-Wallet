@@ -47,16 +47,16 @@ export class TransactionsService {
         throw new NotFoundException('Usuário não encontrado');
       }
 
-      if (tipo === TransactionType.DEBIT && user.saldo < valor) {
+      if (tipo === TransactionType.DEBIT && Number(user.saldo) < valor) {
         throw new BadRequestException('Saldo insuficiente');
       }
 
       const saldoAnterior = user.saldo;
 
       if (tipo === TransactionType.CREDIT) {
-        user.saldo += valor;
+        user.saldo = Number(user.saldo) + valor; // Convertendo para número
       } else {
-        user.saldo -= valor;
+        user.saldo = Number(user.saldo) - valor; // Convertendo para número
       }
 
       await queryRunner.manager.save(user);
