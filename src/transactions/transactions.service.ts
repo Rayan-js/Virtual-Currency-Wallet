@@ -52,12 +52,17 @@ export class TransactionsService {
       }
 
       const saldoAnterior = user.saldo;
+      console.log('Tipo de saldo:', typeof user.saldo, user.saldo);
+      console.log('Tipo de valor:', typeof valor, valor);
+
+      console.log('Antes da operação - saldo:', typeof user.saldo, user.saldo);
 
       if (tipo === TransactionType.CREDIT) {
         user.saldo = Number(user.saldo) + valor; // Convertendo para número
       } else {
         user.saldo = Number(user.saldo) - valor; // Convertendo para número
       }
+      console.log('Após a operação - saldo:', typeof user.saldo, user.saldo);
 
       await queryRunner.manager.save(user);
 

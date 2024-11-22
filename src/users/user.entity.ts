@@ -20,7 +20,16 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0,
+    transformer: {
+      to: (value: number) => value, // Enviar como número
+      from: (value: string) => parseFloat(value), // Converter string para número
+    },
+  })
   saldo: number;
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
