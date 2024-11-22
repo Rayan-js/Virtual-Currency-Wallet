@@ -1,4 +1,5 @@
-version: '3'
+version: '3.9'
+
 services:
   app:
     build: .
@@ -8,12 +9,16 @@ services:
       - postgres
       - mongodb
     environment:
-      - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
-      - DATABASE_USER=seu_usuario
-      - DATABASE_PASSWORD=sua_senha
-      - DATABASE_NAME=virtual_currency_db
-      - MONGODB_URI=mongodb://mongodb:27017/virtual_currency_logs
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: seu_usuario
+      DATABASE_PASSWORD: sua_senha
+      DATABASE_NAME: virtual_currency_db
+      MONGODB_URI: mongodb://mongodb:27017/virtual_currency_logs
+    restart: always # Reiniciar automaticamente em caso de falha
+    networks:
+      - app_network
+
   postgres:
     image: postgres:13
     environment:
@@ -22,10 +27,21 @@ services:
       POSTGRES_DB: virtual_currency_db
     volumes:
       - pgdata:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - app_network
+
   mongodb:
     image: mongo:6
     volumes:
       - mongodata:/data/db
+    restart: always
+    networks:
+      - app_network
+
 volumes:
   pgdata:
   mongodata:
+
+networks:
+  app_network:
