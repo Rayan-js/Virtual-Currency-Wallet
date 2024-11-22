@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { User } from '../users/user.entity';
 
 export enum TransactionType {
@@ -14,15 +20,11 @@ export class Transaction {
   @Column({ type: 'enum', enum: TransactionType })
   tipo: TransactionType;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('bigint')
   valor: number;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  date: Date;
 
   @Column({ length: 255, nullable: true })
   description: string;
-
 
   @ManyToOne(() => User, (user) => user.transactions)
   user: User;

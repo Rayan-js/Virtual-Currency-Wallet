@@ -1,6 +1,14 @@
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Get,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { TransactionType } from './transaction.entity';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -8,22 +16,30 @@ export class TransactionsController {
 
   @Post(':userId/credit')
   credit(
-    @Param('userId') userId: number,
-    @Body('valor') valor: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() createTransactionDto: CreateTransactionDto,
   ) {
-    return this.transactionsService.createTransaction(userId, TransactionType.CREDIT, valor);
+    return this.transactionsService.createTransaction(
+      userId,
+      TransactionType.CREDIT,
+      createTransactionDto.valor,
+    );
   }
 
   @Post(':userId/debit')
   debit(
-    @Param('userId') userId: number,
-    @Body('valor') valor: number,
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() createTransactionDto: CreateTransactionDto,
   ) {
-    return this.transactionsService.createTransaction(userId, TransactionType.DEBIT, valor);
+    return this.transactionsService.createTransaction(
+      userId,
+      TransactionType.DEBIT,
+      createTransactionDto.valor,
+    );
   }
 
   @Get(':userId')
-  getTransactions(@Param('userId') userId: number) {
+  getTransactions(@Param('userId', ParseIntPipe) userId: number) {
     return this.transactionsService.getTransactionsByUser(userId);
   }
 }

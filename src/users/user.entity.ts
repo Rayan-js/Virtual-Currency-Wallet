@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Transaction } from '../transactions/transaction.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -13,12 +14,13 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ type: 'decimal', default: 0, precision: 10, scale: 2 })
+  @Column({ type: 'bigint', default: 0 })
   saldo: number;
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
