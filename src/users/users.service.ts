@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, QueryFailedError } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -31,11 +35,33 @@ export class UsersService {
     }
   }
 
-  findOne(id: number): Promise<User> {
-    return this.usersRepository.findOne({ where: { id } });
+  async findAll(): Promise<User[]> {
+    return await this.usersRepository.find(); // Retorna todos os usuários
   }
 
-  findByEmail(email: string): Promise<User> {
+  async findOne(id: number): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  async findByEmail(email: string): Promise<User> {
     return this.usersRepository.findOne({ where: { email } });
+  }
+
+  async update(
+    id: number,
+    updateUserDto: Partial<CreateUserDto>,
+  ): Promise<User> {
+    const user = await this.findOne(id); // Confirma que o usuário existe
+    Object.assign(user, updateUserDto); // Atualiza os campos
+    return this.usersRepository.save(user); // Salva as alterações no banco
+  }
+
+  async remove(id: number): Promise<void> {
+    const user = await this.findOne(id); // Confirma que o usuário existe
+    await this.usersRepository.remove(user); // Remove o usuário
   }
 }
